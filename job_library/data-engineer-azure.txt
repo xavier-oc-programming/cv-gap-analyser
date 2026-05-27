@@ -1,0 +1,57 @@
+Title: Data Engineer
+Company: Financial Services Firm
+
+About the Role
+
+A leading financial services firm is seeking a Data Engineer to join its
+data platform team. You will build and maintain the pipelines, transformations,
+and warehouse infrastructure that power analytics and machine learning across
+the business.
+
+This is a data-first role. The primary focus is on reliable, scalable data
+movement and transformation — from raw source systems through to clean,
+validated datasets consumed by analysts and ML teams.
+
+Key Responsibilities
+
+- Design and implement ETL and ELT pipelines using Azure Data Factory
+  and Apache Airflow. Move data from operational databases, APIs, and
+  third-party sources into the central data warehouse.
+- Build data transformations using dbt (data build tool): modelling raw
+  data into dimensional schemas, writing tests, managing documentation.
+- Work with PySpark and Azure Databricks for large-scale distributed
+  data processing. Optimise Spark jobs for performance and cost.
+- Write and optimise SQL for data transformation, aggregation, and
+  ad-hoc analysis across PostgreSQL and Azure Synapse Analytics.
+- Maintain Python scripts and utilities for data validation, monitoring,
+  and pipeline automation.
+- Implement data quality checks and alerting. Ensure pipelines meet
+  SLA requirements and produce reliable, trusted data.
+- Collaborate with ML engineers and data scientists on feature engineering
+  requirements and feature pipeline design.
+- Manage data in Azure Data Lake Storage (ADLS) and Azure Blob Storage.
+  Implement partitioning, compression, and file format optimisation (Parquet).
+- Work with Git and GitHub for version control. Contribute to CI/CD
+  workflows for pipeline deployment.
+- Document data lineage, schemas, and pipeline dependencies.
+
+Required Skills
+
+- Python: scripting, automation, data processing with pandas.
+- PySpark: writing distributed data processing jobs on Azure Databricks.
+- Azure: Azure Data Factory, Azure Data Lake Storage, Azure Synapse,
+  Azure Databricks, Azure Blob Storage.
+- SQL: advanced query writing, window functions, query optimisation.
+- ETL and ELT: pipeline design, incremental loading, error handling.
+- dbt: data modelling, testing, documentation, deployment.
+- Apache Airflow: DAG authoring, scheduling, monitoring.
+- Git and GitHub: version control, branching strategies.
+
+Preferred
+
+- Data warehousing patterns: star schema, slowly changing dimensions.
+- PostgreSQL and MySQL: relational database administration.
+- MongoDB: NoSQL data extraction and processing.
+- Redis for caching and session storage in data applications.
+- Docker for containerising data pipeline components.
+- Experience in a regulated industry (financial services, healthcare).

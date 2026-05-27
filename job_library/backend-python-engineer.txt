@@ -1,0 +1,56 @@
+Title: Senior Python Backend Engineer
+Company: SaaS Company
+
+About the Role
+
+We are a B2B SaaS company building developer tooling for engineering teams.
+We are looking for a Senior Python Backend Engineer to join our platform team,
+responsible for our API layer, data persistence, and service infrastructure.
+
+You will own backend systems end-to-end: design, implementation, testing,
+deployment, and production monitoring. We ship fast and maintain high quality —
+this role requires both strong engineering fundamentals and pragmatic delivery.
+
+Key Responsibilities
+
+- Build and maintain REST APIs using FastAPI. Design endpoints, write
+  request validation with Pydantic, implement authentication and authorisation,
+  document with OpenAPI/Swagger.
+- Work with PostgreSQL: schema design, query optimisation, migrations,
+  connection pooling. Write efficient SQL and ORM queries.
+- Containerise services with Docker. Write Dockerfiles, manage multi-stage
+  builds, optimise image sizes. Deploy on Kubernetes (k8s).
+- Implement and maintain CI/CD pipelines using GitHub Actions: automated
+  testing, linting, type checking, Docker builds, deployment workflows.
+- Write comprehensive pytest test suites: unit tests, integration tests,
+  API tests with TestClient. Maintain high test coverage.
+- Design microservices: service boundaries, inter-service communication
+  (REST and gRPC), async message passing.
+- Work with caching and session storage using Redis.
+- Implement background task processing and job queues.
+- Contribute to system design discussions and technical architecture reviews.
+- Mentor junior engineers and review pull requests.
+
+Required Skills
+
+- Python: advanced language features, async/await, type hints, packaging.
+- FastAPI: production-grade API development, dependency injection, middleware,
+  background tasks, WebSocket support.
+- PostgreSQL: schema design, query writing, indexing, performance tuning.
+- Docker: multi-stage builds, Dockerfiles, Docker Compose for local development.
+- Kubernetes: deploying and managing containerised services on k8s.
+- REST APIs: HTTP fundamentals, versioning, authentication patterns,
+  rate limiting, error handling.
+- CI/CD: GitHub Actions, automated testing, deployment pipelines.
+- pytest: unit and integration testing, fixtures, mocking.
+- Git and GitHub: branching strategies, code review, pull request workflows.
+
+Preferred
+
+- Redis: caching strategies, pub/sub, job queues (Celery, RQ, ARQ).
+- GraphQL: schema design and API implementation.
+- Microservices patterns: service mesh, API gateway, distributed tracing.
+- Cloud deployment: AWS or Azure. Container orchestration at scale.
+- Experience with high-traffic production systems (millions of requests/day).
+- MongoDB for document storage workloads.
+- Elasticsearch for full-text search and log aggregation.

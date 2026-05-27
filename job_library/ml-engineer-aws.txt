@@ -1,0 +1,55 @@
+Title: Machine Learning Engineer
+Company: Technology Company
+
+About the Role
+
+We are a fast-growing technology company building AI-powered products for
+enterprise customers. We are looking for a Machine Learning Engineer to join
+our platform team, responsible for training, deploying, and monitoring
+machine learning models in production.
+
+You will own the full ML lifecycle: from exploratory analysis through to
+production deployment and ongoing monitoring. You will work closely with
+data scientists to take research models into production and with product
+teams to embed ML predictions into our core product.
+
+Key Responsibilities
+
+- Build, train, and deploy machine learning models using TensorFlow and PyTorch.
+- Deploy models to AWS infrastructure: Lambda for serverless inference,
+  SageMaker for managed training and deployment, S3 for data storage.
+- Package models and services using Docker. Maintain container registry
+  and deployment workflows using Kubernetes on EKS.
+- Implement CI/CD pipelines for model deployment using GitHub Actions.
+  Automated testing, model validation gates, blue-green deployment.
+- Build REST APIs using FastAPI to serve model predictions to product teams.
+- Implement MLOps practices: experiment tracking with MLflow, model registry,
+  A/B testing framework, performance monitoring, automated alerting.
+- Work with structured and unstructured data: pandas for tabular data,
+  NumPy for numerical computation, scikit-learn for feature pipelines.
+- Apply gradient boosting methods (XGBoost, LightGBM) for tabular prediction
+  tasks alongside neural network approaches.
+- Implement model explainability using SHAP to produce interpretable
+  predictions for regulated use cases.
+- Collaborate with data engineers on feature pipelines. Write and optimise
+  SQL queries for feature extraction from data warehouse.
+
+Required Skills
+
+- Python (primary language): pandas, NumPy, scikit-learn, XGBoost, LightGBM.
+- Deep learning frameworks: TensorFlow or PyTorch (either is sufficient).
+- AWS: Lambda, SageMaker, S3, EC2. Experience deploying production ML workloads.
+- Docker: building images, writing Dockerfiles, container orchestration.
+- MLflow: experiment tracking, model registry, model serving.
+- CI/CD: GitHub Actions or equivalent. Automated testing and deployment.
+- REST APIs: FastAPI or Flask. Deploying ML models as prediction services.
+- NLP and deep learning: text classification, embeddings, transformer models.
+- Model evaluation: cross-validation, metrics selection, A/B testing.
+
+Preferred
+
+- Kubernetes: deploying containerised workloads on EKS.
+- SHAP for model explainability.
+- Amazon Bedrock for foundation model integration.
+- Experience with LLM APIs and prompt engineering.
+- Knowledge of data engineering patterns: pipelines, feature stores.

@@ -1,0 +1,64 @@
+Title: AI Engineer — LLMs and GenAI
+Company: AI Product Company
+
+About the Role
+
+We are an AI-native product company building enterprise software powered by
+large language models. We are hiring an AI Engineer to design and maintain
+the LLM infrastructure that powers our products: retrieval-augmented generation
+pipelines, vector search, prompt management, and LLMOps tooling.
+
+You will work at the intersection of software engineering and applied AI —
+building production-grade systems that make LLMs reliable, observable, and
+cost-efficient at scale.
+
+Key Responsibilities
+
+- Design and implement retrieval-augmented generation (RAG) pipelines using
+  LangChain. Chunk documents, embed with HuggingFace sentence-transformers,
+  store in Pinecone or ChromaDB, retrieve relevant context for LLM prompts.
+- Build and maintain vector database infrastructure (Pinecone, ChromaDB).
+  Manage index creation, upsert pipelines, similarity search, and metadata
+  filtering.
+- Engineer prompts for production use cases: zero-shot classification,
+  document summarisation, entity extraction, question answering. Implement
+  prompt versioning and systematic evaluation.
+- Integrate Amazon Bedrock: Claude, Titan, Llama models via API. Apply
+  Bedrock Guardrails for content moderation and compliance filtering.
+  Evaluate model performance and cost across different Bedrock models.
+- Build LLMOps monitoring: track token usage, latency, cost per request,
+  hallucination rates, and user feedback. Implement automated alerting.
+- Serve LLM-powered features via FastAPI: streaming responses, async
+  handling, rate limiting, authentication.
+- Write Python backend code for data processing, document parsing (PyMuPDF,
+  trafilatura), and pipeline orchestration.
+- Implement experiment tracking with MLflow: comparing prompt strategies,
+  embedding models, retrieval configurations.
+- Contribute to CI/CD pipelines using GitHub Actions. Write pytest test
+  suites for RAG pipelines and API endpoints.
+
+Required Skills
+
+- LangChain: RAG pipeline construction, chain composition, memory management,
+  agent tooling.
+- Vector databases: Pinecone (production experience), ChromaDB (development).
+  Index management, similarity search, metadata filtering.
+- HuggingFace: sentence-transformers for embeddings (all-MiniLM-L6-v2,
+  BGE, E5 variants), Transformers library for model loading and inference.
+- Prompt engineering: systematic prompt design, few-shot examples,
+  chain-of-thought, structured output extraction.
+- Amazon Bedrock: API integration, model selection, guardrails configuration.
+- Python: FastAPI, async programming, pytest, pydantic.
+- LLMOps: monitoring, cost tracking, A/B testing, model versioning.
+- Docker: containerising LLM-serving applications.
+- GitHub Actions: CI/CD for ML and LLM applications.
+- MLflow: experiment tracking for LLM evaluation.
+
+Preferred
+
+- Fine-tuning experience: LoRA, QLoRA, PEFT methods.
+- Embedding model evaluation: benchmarking retrieval quality (NDCG, MRR).
+- spaCy for NLP preprocessing in RAG pipelines.
+- ROUGE and BLEU for text generation evaluation.
+- trafilatura for web content extraction in document ingestion pipelines.
+- Knowledge of Foundation Models: architecture, training, alignment.

@@ -1,0 +1,79 @@
+Title: Data Science / MLOps Engineer
+Company: Global Consulting Firm (Madrid)
+
+About the Role
+
+We are a global management consulting and technology services firm seeking an
+experienced Data Science and MLOps Engineer to join our AI and Data practice in
+Madrid. You will work with enterprise clients across financial services, retail,
+and public sector to design, build, and operationalise machine learning systems
+at scale on AWS and Azure cloud platforms.
+
+This is a hands-on technical role requiring deep expertise in Foundation Models,
+cloud-native ML infrastructure, and the full model lifecycle from experimentation
+through production deployment and ongoing monitoring.
+
+Key Responsibilities
+
+- Architect and implement end-to-end ML pipelines using Amazon SageMaker,
+  covering data ingestion, feature engineering, model training, hyperparameter
+  optimisation, evaluation, and deployment.
+- Build and maintain LLMOps platforms: model versioning, A/B testing,
+  guardrails, latency monitoring, cost optimisation, and drift detection.
+- Integrate Amazon Bedrock across client projects for zero-shot and few-shot
+  classification, summarisation, and document understanding tasks. Apply
+  Bedrock Guardrails for content safety and compliance.
+- Design and deploy Foundation Model solutions: prompt engineering, retrieval-
+  augmented generation (RAG), vector database integration (Pinecone, ChromaDB),
+  and LangChain orchestration.
+- Build data pipelines and ETL processes using AWS Glue, Apache Airflow, and
+  dbt to deliver clean, reliable feature data to ML systems.
+- Implement cloud architecture across AWS (SageMaker, Lambda, S3, EC2, Bedrock)
+  and Azure (Azure ML, Azure Data Factory, Azure App Service) — multi-cloud
+  delivery is a core client requirement.
+- Lead MLOps practices: experiment tracking with MLflow, model registry,
+  CI/CD pipelines for model deployment (GitHub Actions, Jenkins), infrastructure
+  as code with Terraform, containerisation with Docker and Kubernetes.
+- Deliver technical work in Python (primary language), with supporting data
+  work in SQL and PySpark for large-scale data processing.
+- Collaborate with client stakeholders to translate business requirements into
+  ML system designs, produce technical documentation, and present findings.
+
+Required Skills and Experience
+
+- Expert-level Amazon Bedrock — production deployments, guardrails, cost
+  management, model evaluation across Claude, Titan, and Llama variants.
+- Expert-level Amazon SageMaker — training jobs, processing jobs, pipelines,
+  model registry, SageMaker Studio, real-time and batch inference endpoints.
+- Strong Python: data engineering (pandas, NumPy), ML (scikit-learn, XGBoost,
+  LightGBM, TensorFlow or PyTorch), APIs (FastAPI), testing (pytest).
+- Foundation Models and LLM engineering: RAG pipelines, prompt engineering,
+  vector databases, embeddings (HuggingFace sentence-transformers), LangChain.
+- MLOps and LLMOps: MLflow, model versioning, drift detection, A/B testing,
+  CI/CD for ML models, automated retraining pipelines.
+- Data pipelines and ETL: Apache Airflow, dbt, AWS Glue, PySpark.
+- Cloud architecture: AWS (primary), Azure (secondary). Multi-cloud experience
+  preferred. Infrastructure as code with Terraform.
+- Docker and Kubernetes for containerised ML serving.
+- NLP experience: text classification, named entity recognition, summarisation,
+  semantic search, embeddings.
+- Machine learning fundamentals: statistics, linear algebra, probability,
+  feature engineering, model evaluation, cross-validation, regularisation.
+- Deep learning: transformer architectures, transfer learning, fine-tuning.
+
+Preferred
+
+- LLMOps platforms: monitoring LLM latency, token costs, hallucination rates.
+- Bedrock Guardrails configuration for enterprise compliance requirements.
+- Computer Vision experience: CNNs, object detection, image classification.
+- SHAP or LIME for model explainability in regulated industries.
+- Power BI or Tableau for stakeholder-facing analytics delivery.
+- Agile delivery: sprint planning, story writing, client-facing communication.
+
+What We Offer
+
+- Work with enterprise clients on high-impact AI transformations.
+- Access to AWS and Azure enterprise accounts and cutting-edge model APIs.
+- Career development in one of the largest AI practices in Europe.
+- Madrid office with hybrid working flexibility.
+- Competitive salary and benefits package.

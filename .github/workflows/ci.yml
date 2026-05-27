@@ -1,0 +1,33 @@
+# CI runs on every push to main.
+# PINECONE_API_KEY is empty — embeddings.py handles this gracefully.
+# spaCy model downloaded in CI to match production environment.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Download spaCy model
+        run: python -m spacy download en_core_web_sm
+
+      - name: Run tests
+        run: pytest tests/ -v
+        env:
+          PINECONE_API_KEY: ""

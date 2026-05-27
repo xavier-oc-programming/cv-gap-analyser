@@ -1,0 +1,58 @@
+title: CV Gap Analyser — Semantic Job Matching with HuggingFace and Pinecone
+slug: cv-gap-analyser
+category: ai-ml
+date: 2026-05-27
+featured: false
+tags: NLP, machine-learning, LLM, benchmarking, azure, deployment, REST-API, docker, CI-CD, jupyter, web-app, feature-engineering, unsupervised-learning, classification
+tech_stack: Python, HuggingFace sentence-transformers, Pinecone, spaCy, trafilatura, rouge-score, PyMuPDF, BeautifulSoup4, FastAPI, Uvicorn, Docker, Azure App Service, GitHub Actions, pytest
+repo_url: https://github.com/xavier-oc-programming/cv-gap-analyser
+live_url: https://cv-gap-analyser.azurewebsites.net
+demo_url: https://cv-gap-analyser.azurewebsites.net/docs
+short_description: |
+  Semantic CV vs job description analysis identifying missing skills and producing
+  actionable gap recommendations. HuggingFace embeddings for match scoring, Pinecone
+  for a searchable job library, ROUGE for ATS keyword alignment. Accepts job
+  descriptions as text, PDF, or URL via trafilatura extraction.
+full_description: |
+  A CV gap analysis system built to solve a real problem: preparing a job
+  application and needing a systematic way to identify what to evidence.
+  Compares CV and job description using cosine similarity between
+  all-MiniLM-L6-v2 embeddings — capturing semantic alignment beyond shared
+  keywords. A CV describing "deploying models to production cloud infrastructure"
+  matches a role requiring "MLOps and cloud-native deployment" even when the
+  exact words differ.
+
+  spaCy noun phrase extraction combined with a curated technology keyword list
+  identifies specific missing skills. ROUGE metrics flag keyword gaps relevant
+  to ATS screening — a CV can score high semantically but fail automated
+  screening if it uses different terminology. The combination of semantic score
+  and ROUGE gives a complete picture: conceptual alignment and keyword alignment.
+
+  A built-in library of five realistic job descriptions is stored in Pinecone.
+  Every CV analysis retrieves the most semantically similar roles, ranked by
+  score. New job descriptions can be added via POST /api/add-job-url — fetching
+  and indexing directly from a career page URL using trafilatura.
+
+problem: |
+  Automating the manual process of comparing a CV against a job description to
+  identify specific skill gaps and produce actionable recommendations — using
+  semantic understanding rather than keyword counting, and accepting job
+  descriptions from text, PDF, or any career page URL.
+
+solution: |
+  HuggingFace all-MiniLM-L6-v2 for semantic embeddings, spaCy for skill
+  extraction, rouge-score for ATS keyword overlap, trafilatura for URL
+  extraction with BeautifulSoup fallback, Pinecone for the job library.
+  FastAPI serves six match routes covering all input combinations.
+
+challenges: |
+  URL extraction is unreliable for JavaScript-rendered career pages —
+  trafilatura only sees the initial HTML. The BeautifulSoup fallback handles
+  these cases with noisier output. The /fetch-url preview endpoint lets users
+  verify extraction quality before running the full analysis. Pinecone index
+  seeding at startup must check existing vector count to avoid re-indexing
+  the job library on every restart.
+
+results: |
+  TBD — populate after running. Include: match score on sample CV vs
+  data-science-mlops-engineer role, skill coverage rate, top missing skills.
