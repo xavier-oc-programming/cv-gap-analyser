@@ -233,6 +233,20 @@ GitHub Actions runs on every push to `main`:
 
 **Why this project was built.** I built an early version of this tool while preparing my application for a Data Science / MLOps Engineer role at Accenture. The gap analysis identified Amazon Bedrock, SageMaker, and LLMOps as skills present in the job description but without strong portfolio evidence in my CV at the time. The projects built in response — including the SageMaker MLOps pipeline, Bedrock benchmarking projects, and the LLM document summarizer with LLMOps monitoring — are now in the portfolio. The tool identified the gaps. The work closed them.
 
+## Limitations
+
+Real limitations discovered during development, documented honestly.
+
+**Skill extraction is keyword-only.** An initial implementation using spaCy noun phrase extraction was removed after testing — it consistently extracted job description boilerplate, company names, benefit descriptions, and non-English phrases as false-positive skills. The keyword list (~150 terms) is precise but cannot catch tools not on the list. New or niche technologies will be missed.
+
+**LinkedIn URL extraction is fragile.** The unauthenticated guest API endpoint works for most direct job posting URLs but is undocumented and may break without notice. HTML structure varies across job types. The standard login wall blocks trafilatura entirely on collection/search pages.
+
+**Non-English job descriptions.** The keyword list is English-only. Spanish, French, or other-language JDs return few matched skills even when the underlying technologies are identical. A Madrid role listing Python, Azure, and MLflow in Spanish will match on technology keywords but miss terminology that appears only in the local language.
+
+**F1 free tier constraints.** Azure App Service F1 has a 60 CPU-minute daily limit. The embedding model takes ~5–10 seconds to load on cold start. The app sleeps after ~20 minutes of inactivity, causing a 30+ second wake-up delay on the first request. Heavy usage or concurrent requests can exhaust the daily quota.
+
+**Match scores are not calibrated to hiring outcomes.** A score of 72/100 does not mean a 72% chance of interview. The thresholds (Strong/Good/Partial/Weak) were set empirically on professional text pairs and reflect linguistic similarity — not actual job fit, recruiter judgement, or cultural match.
+
 ## 11. Dependencies
 
 | Package | Version | Purpose |

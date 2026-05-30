@@ -46,12 +46,36 @@ solution: |
   FastAPI serves six match routes covering all input combinations.
 
 challenges: |
-  URL extraction is unreliable for JavaScript-rendered career pages —
-  trafilatura only sees the initial HTML. The BeautifulSoup fallback handles
-  these cases with noisier output. The /fetch-url preview endpoint lets users
-  verify extraction quality before running the full analysis. Pinecone index
-  seeding at startup must check existing vector count to avoid re-indexing
-  the job library on every restart.
+  Several hard limitations discovered during development and testing:
+
+  Skill extraction is keyword-only. An initial implementation using spaCy
+  noun phrase extraction was removed after testing — it consistently extracted
+  job description boilerplate, company names, benefit descriptions, and
+  non-English phrases as false-positive skills. The current keyword list (~150
+  terms) is precise but cannot catch tools and technologies not on the list.
+  New or niche tools will be missed entirely.
+
+  LinkedIn URL extraction is fragile. The unauthenticated guest API endpoint
+  works for direct job posting URLs but is undocumented, may break without
+  notice, and returns varying HTML structure across job types. The login wall
+  blocks standard scrapers entirely.
+
+  Non-English job descriptions break skill extraction. The keyword list is
+  in English, so Spanish, French, or other-language JDs return very few
+  matched skills even when the underlying technologies are the same. A Deloitte
+  Madrid role listing Python, Azure, and MLflow in Spanish will match on the
+  technology keywords but miss any terminology that appears only in Spanish.
+
+  The F1 free tier imposes a 60 CPU-minute daily limit. The embedding model
+  (all-MiniLM-L6-v2) takes ~5-10 seconds to load on cold start. Heavy usage
+  or the model download on first deploy can exhaust the daily quota. The app
+  also sleeps after ~20 minutes of inactivity, causing a 30+ second cold start
+  on the first request after idle.
+
+  Semantic similarity scores are not calibrated against real hiring outcomes.
+  A score of 72/100 does not mean a 72% chance of interview. The thresholds
+  (Strong/Good/Partial/Weak) were set empirically on professional text pairs
+  and reflect linguistic similarity, not actual job fit.
 
 results: |
   TBD — populate after running. Include: match score on sample CV vs
