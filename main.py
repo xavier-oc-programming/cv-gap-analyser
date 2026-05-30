@@ -21,6 +21,10 @@ import time
 import threading
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Optional
+
+from dotenv import load_dotenv
+load_dotenv()
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -42,16 +46,16 @@ from config import JOB_LIBRARY_DIR, UPLOAD_DIR
 class MatchTextRequest(BaseModel):
     cv_text: str = Field(..., min_length=100, description="Full CV text")
     jd_text: str = Field(..., min_length=50, description="Job description text")
-    jd_title: str = Field(None, description="Job title (optional)")
-    jd_company: str = Field(None, description="Company name (optional)")
+    jd_title: Optional[str] = Field(None, description="Job title (optional)")
+    jd_company: Optional[str] = Field(None, description="Company name (optional)")
     store_job: bool = Field(False, description="Store this JD in Pinecone library")
 
 
 class MatchURLRequest(BaseModel):
     cv_text: str = Field(..., min_length=100, description="Full CV text")
     jd_url: str = Field(..., description="Job posting URL")
-    jd_title: str = Field(None)
-    jd_company: str = Field(None)
+    jd_title: Optional[str] = Field(None)
+    jd_company: Optional[str] = Field(None)
     store_job: bool = Field(False)
 
 
@@ -62,7 +66,7 @@ class MatchResponse(BaseModel):
     similar_jobs: list
     recommendations: list[str]
     summary: str
-    jd_source_url: str = None
+    jd_source_url: Optional[str] = None
     processing_time_ms: int
 
 
@@ -90,7 +94,7 @@ class AddJobRequest(BaseModel):
     title: str
     company: str
     text: str
-    source_url: str = None
+    source_url: Optional[str] = None
 
 
 class AddJobURLRequest(BaseModel):
@@ -350,6 +354,57 @@ def fetch_url(req: FetchURLRequest):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return URLFetchResponse(**result)
+
+
+@app.post("/match/pdf-cv-url-jd", response_model=MatchResponse, tags=["Match"])
+async def match_pdf_cv_url_jd(
+    cv_file: UploadFile = File(...),
+    jd_url: str = Form(...),
+):
+    """CV uploaded as PDF + job description fetched from URL."""
+    t0 = time.time()
+    try:
+        cv_bytes = await cv_file.read()
+        cv_data = pdf_extractor.extract_text_from_bytes(cv_bytes)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    if len(cv_data["text"]) < 100:
+        raise HTTPException(status_code=422, detail="CV PDF contains too little text.")
+
+    try:
+        fetched = url_fetcher.fetch_job_from_url(jd_url)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    result = scorer.full_analysis(
+        cv_text=cv_data["text"],
+        jd_text=fetched["text"],
+        jd_source_url=jd_url,
+    )
+    return _analysis_response(result, t0)
+
+
+@app.post("/match/pdf-cv-text-jd", response_model=MatchResponse, tags=["Match"])
+async def match_pdf_cv_text_jd(
+    cv_file: UploadFile = File(...),
+    jd_text: str = Form(...),
+):
+    """CV uploaded as PDF + job description pasted as text."""
+    t0 = time.time()
+    try:
+        cv_bytes = await cv_file.read()
+        cv_data = pdf_extractor.extract_text_from_bytes(cv_bytes)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    if len(cv_data["text"]) < 100:
+        raise HTTPException(status_code=422, detail="CV PDF contains too little text.")
+    if len(jd_text.strip()) < 50:
+        raise HTTPException(status_code=422, detail="Job description text is too short.")
+
+    result = scorer.full_analysis(cv_text=cv_data["text"], jd_text=jd_text)
+    return _analysis_response(result, t0)
 
 
 @app.get("/api/similar-jobs", tags=["Job Library"])

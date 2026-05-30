@@ -3,109 +3,167 @@ skill_extractor.py — extract skills and technologies from text.
 
 No classes. Two public functions: extract_skills(), compare_skills().
 
-spaCy model (en_core_web_sm) is loaded lazily and cached globally.
-It must be downloaded before use: python -m spacy download en_core_web_sm
-In Docker it is downloaded at build time to avoid runtime download on first request.
+Extraction is keyword-only: case-insensitive whole-word matching against a
+curated list of ~150 technology and skill terms. spaCy noun phrase extraction
+was removed — it consistently extracted job description boilerplate, company
+names, and non-English phrases as false-positive skills.
 """
 import re
 
 from config import SPACY_MODEL
 
-# Comprehensive technology and skill keyword list.
-# Used for case-insensitive whole-word matching against CV and JD text.
 TECH_KEYWORDS = [
-    # Languages
+    # --- Languages ---
     "Python", "R", "SQL", "Java", "Scala", "JavaScript", "TypeScript",
-    "Go", "Rust", "C++", "C#", "Bash", "Shell",
-    # ML frameworks
+    "Go", "Rust", "C++", "C#", "Bash", "Shell", "YAML",
+
+    # --- ML / DL frameworks ---
     "TensorFlow", "Keras", "PyTorch", "scikit-learn", "XGBoost", "LightGBM",
-    "CatBoost", "Hugging Face", "HuggingFace",
-    # Data libraries
-    "pandas", "NumPy", "Matplotlib", "Seaborn", "Plotly", "SciPy",
-    # Cloud
-    "AWS", "Azure", "GCP", "Google Cloud",
-    "Lambda", "SageMaker", "Bedrock", "S3", "EC2", "ECS", "EKS",
-    "Azure Functions", "Azure ML", "Azure Data Factory", "Databricks",
-    # Orchestration / infra
+    "CatBoost", "HuggingFace", "Hugging Face", "JAX", "MXNet",
+
+    # --- Data libraries ---
+    "pandas", "NumPy", "Matplotlib", "Seaborn", "Plotly", "SciPy", "Statsmodels",
+
+    # --- AWS ---
+    "AWS", "Amazon Web Services",
+    "SageMaker", "Amazon SageMaker",
+    "Bedrock", "Amazon Bedrock",
+    "Bedrock Guardrails",
+    "Lambda", "AWS Lambda",
+    "S3", "EC2", "ECS", "EKS",
+    "AWS Glue", "AWS Step Functions",
+    "CloudFormation", "CloudWatch",
+    "Rekognition", "Comprehend", "Textract",
+
+    # --- Azure ---
+    "Azure", "Microsoft Azure",
+    "Azure ML", "Azure Machine Learning",
+    "Azure Data Factory",
+    "Azure App Service",
+    "Azure DevOps",
+    "Azure Synapse",
+    "Azure Databricks",
+    "Azure Functions",
+    "Azure Blob Storage",
+    "Azure Cognitive Services",
+    "Azure OpenAI",
+
+    # --- GCP ---
+    "GCP", "Google Cloud", "Google Cloud Platform",
+    "BigQuery",
+    "Vertex AI",
+    "Cloud Run",
+    "Cloud Functions",
+    "Cloud Build",
+    "Cloud Composer",
+    "Dataflow",
+    "Dataproc",
+    "GCS", "Cloud Storage",
+    "GKE",
+    "Pub/Sub",
+    "Apigee",
+    "Looker Studio",
+
+    # --- Infra / DevOps ---
     "Docker", "Kubernetes", "Terraform", "Ansible", "Helm",
-    # ML ops
-    "MLflow", "Kubeflow", "Airflow", "dbt", "Spark", "PySpark", "Hadoop",
-    "MLOps", "LLMOps", "DevOps",
-    # APIs / frameworks
-    "FastAPI", "Flask", "Django", "REST API", "GraphQL", "gRPC",
-    # Databases
-    "PostgreSQL", "MySQL", "MongoDB", "Redis", "Elasticsearch",
-    "Pinecone", "ChromaDB", "Weaviate", "Qdrant",
-    # LLM / AI
-    "LangChain", "RAG", "LLM", "GPT", "BERT", "Transformer", "HuggingFace",
-    "Foundation Models", "Prompt Engineering", "Vector Database",
-    "Bedrock Guardrails", "Llama", "Mistral", "Claude",
-    # CI/CD / dev tools
-    "Git", "GitHub", "CI/CD", "GitHub Actions", "Jenkins", "GitLab CI",
-    # BI / analytics
-    "Power BI", "Tableau", "Looker", "Metabase",
-    # Explainability
-    "SHAP", "LIME",
-    # Data engineering
-    "Data Pipeline", "ETL", "Data Warehouse", "Data Lake",
-    "Apache Kafka", "Flink",
-    # ML concepts
-    "Machine Learning", "Deep Learning", "NLP", "Computer Vision",
-    "Statistics", "Linear Algebra", "Probability", "A/B Testing",
+    "CI/CD", "GitHub Actions", "GitLab CI", "Jenkins", "CircleCI",
+    "Git", "GitHub", "GitLab", "Bitbucket",
+    "Linux", "Nginx",
+
+    # --- MLOps / LLMOps ---
+    "MLflow", "Kubeflow", "MLOps", "LLMOps", "DevOps",
+    "Model Registry", "Feature Store", "Weights and Biases", "W&B",
+
+    # --- Data engineering ---
+    "Airflow", "Apache Airflow",
+    "Spark", "PySpark", "Apache Spark",
+    "Hadoop", "Hive",
+    "Kafka", "Apache Kafka",
+    "Flink", "Apache Flink",
+    "dbt", "ETL", "ELT",
+    "Data Pipeline", "Data Warehouse", "Data Lake",
+    "Databricks", "Snowflake", "Redshift",
+
+    # --- Databases ---
+    "PostgreSQL", "MySQL", "SQLite",
+    "MongoDB", "Cassandra", "DynamoDB",
+    "Redis", "Memcached",
+    "Elasticsearch", "OpenSearch",
+    "Pinecone", "ChromaDB", "Weaviate", "Qdrant", "Milvus",
+
+    # --- Frameworks / APIs ---
+    "FastAPI", "Flask", "Django", "FastAPI",
+    "REST API", "GraphQL", "gRPC",
+    "Microservices", "Serverless",
+
+    # --- LLM / GenAI ---
+    "LLM", "LLMs",
+    "RAG",
+    "LangChain", "LlamaIndex",
+    "GPT", "GPT-4", "GPT-3",
+    "BERT", "Transformer", "Transformers",
+    "Foundation Models",
+    "Prompt Engineering",
+    "Vector Database", "Vector Search",
+    "Claude", "Llama", "Mistral", "Gemini",
+    "OpenAI", "Anthropic",
+    "Fine-tuning", "RLHF", "LoRA",
+
+    # --- NLP / CV ---
+    "NLP", "Natural Language Processing",
+    "Computer Vision",
+    "spaCy", "NLTK",
+    "OCR", "CNNs", "RNNs",
+    "Stable Diffusion", "Diffusion Models",
+    "Sentence Transformers", "sentence-transformers",
+
+    # --- ML concepts ---
+    "Machine Learning", "Deep Learning",
+    "Supervised Learning", "Unsupervised Learning", "Reinforcement Learning",
     "Feature Engineering", "Hyperparameter Tuning", "Transfer Learning",
-    # Process
-    "Agile", "Scrum",
-    # Libraries used in this project (self-referential but useful)
-    "trafilatura", "spaCy", "sentence-transformers",
-    # Azure specifics
-    "Azure App Service", "Azure DevOps",
-    # Misc
-    "ROUGE", "PyMuPDF", "BeautifulSoup",
+    "A/B Testing", "Experiment Tracking",
+    "Time Series", "Forecasting",
+    "Clustering", "Classification", "Regression",
+    "Statistics", "Linear Algebra", "Probability",
+
+    # --- Explainability ---
+    "SHAP", "LIME",
+
+    # --- BI / Analytics ---
+    "Power BI", "Tableau", "Looker", "Metabase", "Grafana", "Kibana",
+    "Google Analytics",
+
+    # --- Process ---
+    "Agile", "Scrum", "Kanban",
+
+    # --- Misc ---
+    "trafilatura", "PyMuPDF", "BeautifulSoup",
+    "pytest", "unittest",
+    "ROUGE", "BLEU",
 ]
-
-_nlp = None
-
-
-def _get_nlp():
-    global _nlp
-    if _nlp is None:
-        import spacy
-        _nlp = spacy.load(SPACY_MODEL)
-    return _nlp
 
 
 def extract_skills(text: str) -> list[str]:
     """
-    Extract skill and technology mentions from text.
+    Extract skill and technology mentions from text using keyword matching.
 
-    Two-pass approach:
-    1. Keyword matching: scan for TECH_KEYWORDS (case-insensitive,
-       whole-word match using regex \\b boundaries)
-    2. spaCy noun phrases: extract noun chunks that look like
-       technical terms (not common stopwords, length > 2 chars)
+    Case-insensitive whole-word match (regex \\b boundaries) against
+    TECH_KEYWORDS. Returns deduplicated, sorted list using the canonical
+    keyword capitalisation.
 
-    Deduplicate, normalise case, return sorted list.
+    spaCy noun phrase extraction was removed: it produced too many false
+    positives (boilerplate, non-English phrases, company names) to be useful.
+    The keyword list is deterministic, precise, and covers the real technology
+    landscape for ML/AI/data roles.
     """
-    found = set()
+    found: dict[str, str] = {}  # lowercase key → canonical keyword
 
-    # Pass 1: keyword matching
     for kw in TECH_KEYWORDS:
         pattern = r'\b' + re.escape(kw) + r'\b'
         if re.search(pattern, text, re.IGNORECASE):
-            found.add(kw)
+            found[kw.lower()] = kw
 
-    # Pass 2: spaCy noun phrases
-    nlp = _get_nlp()
-    doc = nlp(text[:5000])  # limit to avoid slow processing on huge texts
-    stopwords = nlp.Defaults.stop_words
-    for chunk in doc.noun_chunks:
-        phrase = chunk.text.strip()
-        if len(phrase) > 2 and phrase.lower() not in stopwords:
-            # Only include if it looks technical (contains capital or digit)
-            if re.search(r'[A-Z0-9]', phrase):
-                found.add(phrase)
-
-    return sorted(found)
+    return sorted(found.values())
 
 
 def compare_skills(cv_skills: list[str], jd_skills: list[str]) -> dict:

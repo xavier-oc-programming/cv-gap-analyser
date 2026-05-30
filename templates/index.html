@@ -563,7 +563,7 @@
       }
       const data = await resp.json();
       urlFetchedText.value = data.text;
-      const badgeClass = data.extraction_method === 'trafilatura' ? 'badge-green' : 'badge-amber';
+      const badgeClass = ['trafilatura', 'linkedin_guest_api'].includes(data.extraction_method) ? 'badge-green' : 'badge-amber';
       preview.innerHTML = `
         <span class="badge ${badgeClass}">${data.extraction_method}</span>
         <span style="float:right;color:var(--gray-400)">${data.word_count} words</span>
@@ -625,16 +625,9 @@
         // or just use /match/text with job text loaded from the library files.
         // For simplicity, we fetch the full text via a dedicated endpoint.
         const libResp = await fetch(`/api/job-library-text/${jobId}`);
-        let jdText = '';
-        if (libResp.ok) {
-          const libData = await libResp.json();
-          jdText = libData.text;
-        } else {
-          // Fallback: use similar jobs endpoint to show partial info
-          throw new Error('Could not load library job text. Use Paste text or URL instead.');
-        }
-
-        result = await postJSON('/match/text', { cv_text: cvText, jd_text: jdText });
+        if (!libResp.ok) throw new Error('Could not load library job text.');
+        const libData = await libResp.json();
+        result = await postJSON('/match/text', { cv_text: cvText, jd_text: libData.text });
 
       } else if (cvActiveTab === 'paste' && jdActiveTab === 'paste') {
         const cvText = document.getElementById('cv-text').value;
@@ -665,13 +658,45 @@
         form.append('jd_file', jdFile);
         result = await postForm('/match/pdf', form);
 
+      } else if (cvActiveTab === 'pdf' && jdActiveTab === 'url') {
+        const cvFile = document.getElementById('cv-file').files[0];
+        if (!cvFile) throw new Error('Please upload your CV PDF.');
+        if (!urlFetchedText.value) throw new Error('Please click Fetch to load the job URL first.');
+        const form = new FormData();
+        form.append('cv_file', cvFile);
+        form.append('jd_url', document.getElementById('jd-url-input').value.trim());
+        result = await postForm('/match/pdf-cv-url-jd', form);
+
+      } else if (cvActiveTab === 'pdf' && jdActiveTab === 'paste') {
+        const cvFile = document.getElementById('cv-file').files[0];
+        const jdText = document.getElementById('jd-text').value;
+        if (!cvFile) throw new Error('Please upload your CV PDF.');
+        if (!jdText.trim()) throw new Error('Please paste the job description.');
+        const form = new FormData();
+        form.append('cv_file', cvFile);
+        form.append('jd_text', jdText);
+        result = await postForm('/match/pdf-cv-text-jd', form);
+
+      } else if (cvActiveTab === 'pdf' && jdActiveTab === 'library') {
+        const cvFile = document.getElementById('cv-file').files[0];
+        const jobId = document.getElementById('jd-library-select').value;
+        if (!cvFile) throw new Error('Please upload your CV PDF.');
+        if (!jobId) throw new Error('Please select a job from the library.');
+        const libResp = await fetch(`/api/job-library-text/${jobId}`);
+        if (!libResp.ok) throw new Error('Could not load library job text.');
+        const libData = await libResp.json();
+        const form = new FormData();
+        form.append('cv_file', cvFile);
+        form.append('jd_text', libData.text);
+        result = await postForm('/match/pdf-cv-text-jd', form);
+
       } else {
-        throw new Error('Unsupported input combination. Try CV paste + JD paste, URL, or PDF.');
+        throw new Error('Unsupported input combination. Supported: any CV mode + any JD mode.');
       }
 
       renderResults(result);
     } catch(e) {
-      errorDiv.textContent = e.message || String(e);
+      errorDiv.textContent = (e && e.message) ? e.message : JSON.stringify(e);
       errorDiv.classList.add('visible');
     } finally {
       btn.disabled = false;
