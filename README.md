@@ -182,7 +182,7 @@ curl -X POST http://localhost:8000/match/url \
 # Resource group and plan
 az group create --name cv-gap-analyser-rg --location westeurope
 az appservice plan create --name cv-gap-analyser-plan \
-  --resource-group cv-gap-analyser-rg --sku B1 --is-linux
+  --resource-group cv-gap-analyser-rg --sku F1 --is-linux
 
 # Web app
 az webapp create --name cv-gap-analyser \
