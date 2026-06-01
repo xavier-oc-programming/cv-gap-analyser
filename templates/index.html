@@ -712,7 +712,11 @@
     });
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({}));
-      throw new Error(err.detail || `Request failed (${resp.status})`);
+      const detail = err.detail;
+      const msg = Array.isArray(detail)
+        ? detail.map(d => `${d.loc ? d.loc.join('.') + ': ' : ''}${d.msg}`).join(' | ')
+        : (detail || `Request failed (${resp.status})`);
+      throw new Error(msg);
     }
     return resp.json();
   }
@@ -721,7 +725,11 @@
     const resp = await fetch(url, { method: 'POST', body: form });
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({}));
-      throw new Error(err.detail || `Request failed (${resp.status})`);
+      const detail = err.detail;
+      const msg = Array.isArray(detail)
+        ? detail.map(d => `${d.loc ? d.loc.join('.') + ': ' : ''}${d.msg}`).join(' | ')
+        : (detail || `Request failed (${resp.status})`);
+      throw new Error(msg);
     }
     return resp.json();
   }
