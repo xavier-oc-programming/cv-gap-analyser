@@ -4,7 +4,7 @@ category: ai-ml
 date: 2026-05-27
 featured: false
 tags: NLP, machine-learning, LLM, benchmarking, azure, deployment, REST-API, docker, CI-CD, jupyter, web-app, feature-engineering, unsupervised-learning, classification
-tech_stack: Python, HuggingFace sentence-transformers, Pinecone, spaCy, trafilatura, rouge-score, PyMuPDF, BeautifulSoup4, FastAPI, Uvicorn, Docker, Azure App Service, GitHub Actions, pytest
+tech_stack: Python, HuggingFace sentence-transformers, HuggingFace Spaces, Pinecone, trafilatura, rouge-score, PyMuPDF, BeautifulSoup4, FastAPI, Uvicorn, Docker, GitHub Actions, pytest
 repo_url: https://github.com/xavier-oc-programming/cv-gap-analyser
 live_url: https://xavier-oc-machinelearn-cv-gap-analyser.hf.space
 demo_url: https://xavier-oc-machinelearn-cv-gap-analyser.hf.space/docs
@@ -36,7 +36,7 @@ challenges: |
 
   Non-English job descriptions break skill extraction. The keyword list is English-only, so Spanish, French, or other-language JDs return few matched skills even when the underlying technologies are the same.
 
-  The F1 free tier imposes a 60 CPU-minute daily limit. The embedding model takes ~5–10 seconds to load on cold start and the app sleeps after ~20 minutes of inactivity, causing a 30+ second wake-up delay on the first request after idle.
+  HuggingFace Spaces free tier sleeps after inactivity, causing a cold start delay on the first request. The shared CPU tier can be slow under concurrent load.
 
   Semantic similarity scores are not calibrated against real hiring outcomes. A score of 72/100 does not mean a 72% chance of interview. The thresholds reflect linguistic similarity, not actual job fit.
 

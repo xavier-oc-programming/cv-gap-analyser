@@ -14,19 +14,19 @@ Semantic CV vs job description analysis. Identifies which skills the role requir
 
 Built to solve a real problem: preparing a job application and needing a systematic way to identify what to evidence.
 
-**Live demo → [cv-gap-analyser.azurewebsites.net](https://cv-gap-analyser.azurewebsites.net)**
+**Live demo → [xavier-oc-machinelearn-cv-gap-analyser.hf.space](https://xavier-oc-machinelearn-cv-gap-analyser.hf.space)**
 &nbsp;&nbsp;·&nbsp;&nbsp;
-**API docs → [/docs](https://cv-gap-analyser.azurewebsites.net/docs)**
+**API docs → [/docs](https://xavier-oc-machinelearn-cv-gap-analyser.hf.space/docs)**
 &nbsp;&nbsp;·&nbsp;&nbsp;
 **Notebook → notebook.ipynb**
 
 ![Python 3.11](https://img.shields.io/badge/Python-3.11-blue)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-sentence--transformers-yellow)
 ![Pinecone](https://img.shields.io/badge/Pinecone-vector--db-green)
-![spaCy](https://img.shields.io/badge/spaCy-NLP-blue)
+![HuggingFace Spaces](https://img.shields.io/badge/HuggingFace-Spaces-orange)
 ![trafilatura](https://img.shields.io/badge/trafilatura-URL--extraction-lightgrey)
 ![FastAPI](https://img.shields.io/badge/FastAPI-REST--API-teal)
-![Azure App Service](https://img.shields.io/badge/Azure-App%20Service-blue)
+![Docker](https://img.shields.io/badge/Docker-container-blue)
 
 ---
 
@@ -231,7 +231,7 @@ GitHub Actions runs on every push to `main`:
 
 **Why semantic embeddings over keyword matching.** Keyword matching counts shared words. It misses synonyms, paraphrases, and domain-equivalent descriptions. A CV written in plain language about work that exactly matches a job description may score zero on keyword overlap. Cosine similarity between sentence embeddings captures shared meaning regardless of specific word choice. The practical implication: a CV describing "deploying models to production cloud infrastructure" correctly scores high against a role requiring "MLOps and cloud-native deployment".
 
-**Why all-MiniLM-L6-v2 over larger models.** Larger embedding models (e.g., `all-mpnet-base-v2`, `e5-large`) produce marginally better similarity estimates but require significantly more memory and inference time. For CV-JD matching on professional text, the quality difference is negligible. MiniLM-L6-v2 loads in under 2 seconds on CPU, embeds a 500-word document in milliseconds, and runs comfortably on the Azure App Service B1 tier. The 384-dimensional output is small enough for Pinecone's free tier without dimension reduction.
+**Why all-MiniLM-L6-v2 over larger models.** Larger embedding models (e.g., `all-mpnet-base-v2`, `e5-large`) produce marginally better similarity estimates but require significantly more memory and inference time. For CV-JD matching on professional text, the quality difference is negligible. MiniLM-L6-v2 loads in under 2 seconds on CPU, embeds a 500-word document in milliseconds, and runs comfortably on HuggingFace Spaces free CPU tier. The 384-dimensional output is small enough for Pinecone's free tier without dimension reduction.
 
 **Why ROUGE alongside semantic similarity (ATS framing).** The two metrics answer different questions. Semantic similarity asks: do these documents cover the same concepts? ROUGE asks: does the CV use the same words as the JD? Both matter. A CV with high semantic similarity but low ROUGE-L is at risk of failing ATS screening — automated keyword-matching filters that operate before a human reads the CV. The ROUGE score surfaces this specific failure mode and motivates a concrete recommendation: mirror the JD's exact terminology where possible.
 
@@ -253,7 +253,7 @@ Real limitations discovered during development, documented honestly.
 
 **Non-English job descriptions.** The keyword list is English-only. Spanish, French, or other-language JDs return few matched skills even when the underlying technologies are identical. A Madrid role listing Python, Azure, and MLflow in Spanish will match on technology keywords but miss terminology that appears only in the local language.
 
-**F1 free tier constraints.** Azure App Service F1 has a 60 CPU-minute daily limit. The embedding model takes ~5–10 seconds to load on cold start. The app sleeps after ~20 minutes of inactivity, causing a 30+ second wake-up delay on the first request. Heavy usage or concurrent requests can exhaust the daily quota.
+**HuggingFace Spaces free tier constraints.** The app sleeps after inactivity, causing a cold start delay on the first request after idle. The free CPU tier is shared and can be slow under concurrent load.
 
 **Match scores are not calibrated to hiring outcomes.** A score of 72/100 does not mean a 72% chance of interview. The thresholds (Strong/Good/Partial/Weak) were set empirically on professional text pairs and reflect linguistic similarity — not actual job fit, recruiter judgement, or cultural match.
 
