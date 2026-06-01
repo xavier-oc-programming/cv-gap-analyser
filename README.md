@@ -72,7 +72,7 @@ cv-gap-analyser/
 ├── scorer.py                 — match score, ROUGE, full_analysis()
 ├── pdf_extractor.py          — PyMuPDF text extraction from PDF bytes
 ├── url_fetcher.py            — trafilatura + BeautifulSoup URL extraction
-├── main.py                   — FastAPI app (12 routes)
+├── main.py                   — FastAPI app (15 routes)
 ├── Dockerfile                — python:3.11-slim, spaCy model at build time
 ├── startup.txt               — gunicorn startup command for Azure
 ├── notebook.ipynb            — full walkthrough with examples
@@ -97,7 +97,7 @@ cv-gap-analyser/
 
 **Semantic matching** — CV and job description are each embedded as 384-dimensional vectors using `all-MiniLM-L6-v2`. Cosine similarity between the vectors produces the match score (0–1, displayed as 0–100). This captures conceptual alignment regardless of exact word choice: "deploying models to production cloud infrastructure" matches "MLOps and cloud-native deployment" because the vectors cluster in the same region of embedding space.
 
-**Skill extraction** — two-pass approach using spaCy (`en_core_web_sm`) and a curated keyword list of ~80 ML/data/software technologies. Pass 1: case-insensitive whole-word keyword matching. Pass 2: spaCy noun phrase extraction filtered for technical terms. The comparison identifies exactly which skills appear in the JD but not the CV — the actionable gap list.
+**Skill extraction** — case-insensitive whole-word keyword matching against a curated list of ~150 ML/data/software technologies covering AWS, Azure, GCP, LLM tooling, data engineering, and MLOps. A spaCy noun phrase pass was removed after testing — it consistently extracted job description boilerplate and non-English phrases as false positives. The keyword list is deterministic and precise.
 
 **ROUGE keyword overlap** — ROUGE treats the JD as reference and the CV as hypothesis. Higher ROUGE-L means more CV language appears verbatim in the JD. This matters for ATS: a CV can score high semantically (same concepts, different words) but fail automated screening that looks for exact keyword presence. ROUGE-L below 0.3 alongside high semantic similarity is a signal to mirror more of the JD terminology.
 

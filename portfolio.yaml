@@ -41,5 +41,4 @@ challenges: |
   Semantic similarity scores are not calibrated against real hiring outcomes. A score of 72/100 does not mean a 72% chance of interview. The thresholds reflect linguistic similarity, not actual job fit.
 
 results: |
-  TBD — populate after running. Include: match score on sample CV vs
-  data-science-mlops-engineer role, skill coverage rate, top missing skills.
+  Tested against the Data Science / MLOps Engineer target role. Xavier's CV scores Strong match (76/100) with Good skill coverage. Matched skills include Amazon Bedrock, Amazon SageMaker, AWS, Azure, CI/CD, Docker, FastAPI, GitHub Actions, LangChain, MLflow, MLOps, Pinecone, Python, RAG, and sentence-transformers. Missing skills flagged by the keyword analyser: Bedrock Guardrails, BigQuery, GCP, and Kubernetes — all consistent with the actual gap between the CV and the target role at the time of analysis.

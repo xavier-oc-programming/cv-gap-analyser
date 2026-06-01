@@ -546,27 +546,20 @@
     document.getElementById(labelId).textContent = file ? file.name : '';
   }
 
-  async function previewPDF(inputId, labelId, previewId) {
+  const _pdfBlobUrls = {};
+
+  function showPDFViewer(inputId, labelId, viewerId) {
     const file = document.getElementById(inputId).files[0];
     document.getElementById(labelId).textContent = file ? file.name : '';
-    const preview = document.getElementById(previewId);
-    if (!file) { preview.classList.remove('visible'); return; }
-    preview.innerHTML = 'Extracting text…';
-    preview.classList.add('visible');
-    const form = new FormData();
-    form.append('file', file);
-    try {
-      const resp = await fetch('/api/preview-pdf', { method: 'POST', body: form });
-      if (!resp.ok) { preview.innerHTML = '<span style="color:var(--red)">Could not extract text from PDF.</span>'; return; }
-      const data = await resp.json();
-      preview.innerHTML = `
-        <span class="badge badge-green">PDF</span>
-        <span style="float:right;color:var(--gray-400)">${data.word_count} words · ${data.page_count} pages</span>
-        <br/><span>${data.text.slice(0, 500)}…</span>
-      `;
-    } catch(e) {
-      preview.innerHTML = '<span style="color:var(--red)">Preview failed.</span>';
-    }
+    const viewer = document.getElementById(viewerId);
+    if (!file) { viewer.style.display = 'none'; return; }
+    if (_pdfBlobUrls[viewerId]) URL.revokeObjectURL(_pdfBlobUrls[viewerId]);
+    _pdfBlobUrls[viewerId] = URL.createObjectURL(file);
+    viewer.src = _pdfBlobUrls[viewerId];
+    viewer.style.display = 'block';
+    // Guarantee tab state matches the file upload regardless of click order
+    if (viewerId === 'cv-pdf-viewer') cvTab.active = 'pdf';
+    if (viewerId === 'jd-pdf-viewer') jdTab.active = 'pdf';
   }
 
   async function fetchURLPreview() {
