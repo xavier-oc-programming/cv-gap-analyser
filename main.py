@@ -355,6 +355,22 @@ def fetch_url(req: FetchURLRequest):
     return URLFetchResponse(**result)
 
 
+@app.post("/api/preview-pdf", tags=["Utilities"])
+async def preview_pdf(file: UploadFile = File(...)):
+    """Extract and return a text preview from a PDF upload."""
+    try:
+        pdf_bytes = await file.read()
+        data = pdf_extractor.extract_text_from_bytes(pdf_bytes)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return {
+        "text": data["text"],
+        "word_count": data["word_count"],
+        "page_count": data["page_count"],
+        "truncated": data["truncated"],
+    }
+
+
 @app.post("/match/pdf-cv-url-jd", response_model=MatchResponse, tags=["Match"])
 async def match_pdf_cv_url_jd(
     cv_file: UploadFile = File(...),

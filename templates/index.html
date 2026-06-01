@@ -392,10 +392,11 @@
         </div>
         <div id="cv-pdf" class="tab-pane">
           <div class="file-drop" onclick="document.getElementById('cv-file').click()">
-            <input type="file" id="cv-file" accept=".pdf" onchange="showFilename('cv-file', 'cv-filename')" />
+            <input type="file" id="cv-file" accept=".pdf" onchange="previewPDF('cv-file', 'cv-filename', 'cv-pdf-preview')" />
             <p>Click to upload CV PDF</p>
             <div class="filename" id="cv-filename"></div>
           </div>
+          <div id="cv-pdf-preview" class="url-preview" style="margin-top:0.75rem;"></div>
         </div>
       </div>
     </div>
@@ -415,10 +416,11 @@
         </div>
         <div id="jd-pdf" class="tab-pane">
           <div class="file-drop" onclick="document.getElementById('jd-file').click()">
-            <input type="file" id="jd-file" accept=".pdf" onchange="showFilename('jd-file', 'jd-filename')" />
+            <input type="file" id="jd-file" accept=".pdf" onchange="previewPDF('jd-file', 'jd-filename', 'jd-pdf-preview')" />
             <p>Click to upload job description PDF</p>
             <div class="filename" id="jd-filename"></div>
           </div>
+          <div id="jd-pdf-preview" class="url-preview" style="margin-top:0.75rem;"></div>
         </div>
         <div id="jd-url" class="tab-pane">
           <div class="url-row">
@@ -542,6 +544,29 @@
   function showFilename(inputId, labelId) {
     const file = document.getElementById(inputId).files[0];
     document.getElementById(labelId).textContent = file ? file.name : '';
+  }
+
+  async function previewPDF(inputId, labelId, previewId) {
+    const file = document.getElementById(inputId).files[0];
+    document.getElementById(labelId).textContent = file ? file.name : '';
+    const preview = document.getElementById(previewId);
+    if (!file) { preview.classList.remove('visible'); return; }
+    preview.innerHTML = 'Extracting text…';
+    preview.classList.add('visible');
+    const form = new FormData();
+    form.append('file', file);
+    try {
+      const resp = await fetch('/api/preview-pdf', { method: 'POST', body: form });
+      if (!resp.ok) { preview.innerHTML = '<span style="color:var(--red)">Could not extract text from PDF.</span>'; return; }
+      const data = await resp.json();
+      preview.innerHTML = `
+        <span class="badge badge-green">PDF</span>
+        <span style="float:right;color:var(--gray-400)">${data.word_count} words · ${data.page_count} pages</span>
+        <br/><span>${data.text.slice(0, 500)}…</span>
+      `;
+    } catch(e) {
+      preview.innerHTML = '<span style="color:var(--red)">Preview failed.</span>';
+    }
   }
 
   async function fetchURLPreview() {
