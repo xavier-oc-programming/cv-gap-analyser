@@ -3,7 +3,7 @@ slug: cv-gap-analyser
 category: ai-ml
 date: 2026-05-27
 featured: false
-tags: NLP, machine-learning, LLM, benchmarking, azure, deployment, REST-API, docker, CI-CD, jupyter, web-app, feature-engineering, unsupervised-learning, classification
+tags: NLP, machine-learning, LLM, deployment, REST-API, docker, CI-CD, jupyter, web-app, huggingface, vector-database, semantic-search
 tech_stack: Python, HuggingFace sentence-transformers, HuggingFace Spaces, Pinecone, trafilatura, rouge-score, PyMuPDF, BeautifulSoup4, FastAPI, Uvicorn, Docker, GitHub Actions, pytest
 repo_url: https://github.com/xavier-oc-programming/cv-gap-analyser
 live_url: https://xavier-oc-machinelearn-cv-gap-analyser.hf.space
@@ -21,13 +21,10 @@ full_description: |
   A built-in library of five realistic job descriptions is stored in Pinecone. Every CV analysis retrieves the most semantically similar roles, ranked by score. New job descriptions can be added via POST /api/add-job-url — fetching and indexing directly from a career page URL using trafilatura.
 
 problem: |
-  Automating the manual process of comparing a CV against a job description to
-  identify specific skill gaps and produce actionable recommendations — using
-  semantic understanding rather than keyword counting, and accepting job
-  descriptions from text, PDF, or any career page URL.
+  Automating the manual process of comparing a CV against a job description to identify specific skill gaps and produce actionable recommendations — using semantic understanding rather than keyword counting, and accepting job descriptions from text, PDF, or URL including LinkedIn.
 
 solution: |
-  HuggingFace all-MiniLM-L6-v2 for semantic embeddings, a curated keyword list for skill extraction, rouge-score for ATS keyword overlap, trafilatura for URL extraction with BeautifulSoup fallback, Pinecone for the job library. FastAPI serves six match routes covering all input combinations.
+  HuggingFace all-MiniLM-L6-v2 for semantic embeddings, a curated keyword list (~150 terms) for skill extraction, rouge-score for ATS keyword overlap, LinkedIn guest API + trafilatura for URL extraction with BeautifulSoup fallback, Pinecone for the job library. FastAPI serves ten match routes covering all CV/JD input combinations. Deployed as a Docker Space on HuggingFace Spaces.
 
 challenges: |
   Skill extraction is keyword-only. An initial spaCy noun phrase implementation was removed after testing — it consistently extracted job description boilerplate, company names, benefit descriptions, and non-English phrases as false-positive skills. The current keyword list (~150 terms) is precise but cannot catch tools not on the list.
