@@ -1,3 +1,13 @@
+---
+title: CV Gap Analyser
+emoji: 📊
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+app_port: 8000
+pinned: false
+---
+
 # cv-gap-analyser
 
 Semantic CV vs job description analysis. Identifies which skills the role requires that the CV does not demonstrate — and produces specific, actionable recommendations to close those gaps. Match score (0–100), skill gap list, ROUGE keyword overlap for ATS alignment, and a searchable job description library via Pinecone. Accepts the job description as text, PDF, or URL.
