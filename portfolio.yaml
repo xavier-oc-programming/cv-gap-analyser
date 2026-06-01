@@ -6,8 +6,8 @@ featured: false
 tags: NLP, machine-learning, LLM, benchmarking, azure, deployment, REST-API, docker, CI-CD, jupyter, web-app, feature-engineering, unsupervised-learning, classification
 tech_stack: Python, HuggingFace sentence-transformers, Pinecone, spaCy, trafilatura, rouge-score, PyMuPDF, BeautifulSoup4, FastAPI, Uvicorn, Docker, Azure App Service, GitHub Actions, pytest
 repo_url: https://github.com/xavier-oc-programming/cv-gap-analyser
-live_url: https://cv-gap-analyser.azurewebsites.net
-demo_url: https://cv-gap-analyser.azurewebsites.net/docs
+live_url: https://xavier-oc-machinelearn-cv-gap-analyser.hf.space
+demo_url: https://xavier-oc-machinelearn-cv-gap-analyser.hf.space/docs
 short_description: |
   Semantic CV vs job description analysis identifying missing skills and producing
   actionable gap recommendations. HuggingFace embeddings for match scoring, Pinecone
