@@ -1,13 +1,3 @@
----
-title: CV Gap Analyser
-emoji: 📊
-colorFrom: indigo
-colorTo: blue
-sdk: docker
-app_port: 8000
-pinned: false
----
-
 # cv-gap-analyser
 
 Semantic CV vs job description analysis. Identifies which skills the role requires that the CV does not demonstrate — and produces specific, actionable recommendations to close those gaps. Match score (0–100), skill gap list, ROUGE keyword overlap for ATS alignment, and a searchable job description library via Pinecone. Accepts the job description as text, PDF, or URL.
@@ -118,15 +108,16 @@ The `/fetch-url` endpoint lets you verify extraction quality before running the 
 
 Five built-in job descriptions in `job_library/`:
 
-| Job ID | Title | Company |
-|--------|-------|---------|
-| `data-science-mlops-engineer` | Data Science / MLOps Engineer | Global Consulting Firm (Madrid) |
-| `ml-engineer-aws` | Machine Learning Engineer | Technology Company |
-| `data-engineer-azure` | Data Engineer | Financial Services Firm |
-| `ai-engineer-llm` | AI Engineer — LLMs and GenAI | AI Product Company |
-| `backend-python-engineer` | Senior Python Backend Engineer | SaaS Company |
+| Job ID                        | Title                          | Company                         |
+| ----------------------------- | ------------------------------ | ------------------------------- |
+| `data-science-mlops-engineer` | Data Science / MLOps Engineer  | Global Consulting Firm (Madrid) |
+| `ml-engineer-aws`             | Machine Learning Engineer      | Technology Company              |
+| `data-engineer-azure`         | Data Engineer                  | Financial Services Firm         |
+| `ai-engineer-llm`             | AI Engineer — LLMs and GenAI   | AI Product Company              |
+| `backend-python-engineer`     | Senior Python Backend Engineer | SaaS Company                    |
 
 **Add a job by text:**
+
 ```bash
 curl -X POST http://localhost:8000/api/add-job \
   -H "Content-Type: application/json" \
@@ -134,6 +125,7 @@ curl -X POST http://localhost:8000/api/add-job \
 ```
 
 **Add a job by URL:**
+
 ```bash
 curl -X POST http://localhost:8000/api/add-job-url \
   -H "Content-Type: application/json" \
@@ -146,28 +138,29 @@ Tested against the Data Science / MLOps Engineer target role. Xavier's CV scores
 
 ## 7. API Reference
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | `/` | Demo frontend |
-| GET | `/health` | Health check |
-| GET | `/docs` | Interactive API docs (Swagger) |
-| POST | `/match/text` | CV text + JD text |
-| POST | `/match/url` | CV text + JD URL |
-| POST | `/match/pdf` | CV PDF + JD PDF |
-| POST | `/match/cv-text-jd-pdf` | CV text + JD PDF upload |
-| POST | `/match/cv-text-jd-url` | CV text + JD URL (form fields) |
-| POST | `/match/pdf-cv-url-jd` | CV PDF upload + JD URL |
-| POST | `/match/pdf-cv-text-jd` | CV PDF upload + JD text |
-| POST | `/fetch-url` | Preview URL extraction |
-| POST | `/api/preview-pdf` | Extract text preview from PDF |
-| GET | `/api/similar-jobs` | Find similar jobs by CV text |
-| GET | `/api/job-library` | List built-in library |
-| GET | `/api/job-library-text/{id}` | Get full text of library job |
-| POST | `/api/add-job` | Add job by text |
-| POST | `/api/add-job-url` | Add job by URL |
-| GET | `/api/skills` | Extract skills from text |
+| Method | Route                        | Description                    |
+| ------ | ---------------------------- | ------------------------------ |
+| GET    | `/`                          | Demo frontend                  |
+| GET    | `/health`                    | Health check                   |
+| GET    | `/docs`                      | Interactive API docs (Swagger) |
+| POST   | `/match/text`                | CV text + JD text              |
+| POST   | `/match/url`                 | CV text + JD URL               |
+| POST   | `/match/pdf`                 | CV PDF + JD PDF                |
+| POST   | `/match/cv-text-jd-pdf`      | CV text + JD PDF upload        |
+| POST   | `/match/cv-text-jd-url`      | CV text + JD URL (form fields) |
+| POST   | `/match/pdf-cv-url-jd`       | CV PDF upload + JD URL         |
+| POST   | `/match/pdf-cv-text-jd`      | CV PDF upload + JD text        |
+| POST   | `/fetch-url`                 | Preview URL extraction         |
+| POST   | `/api/preview-pdf`           | Extract text preview from PDF  |
+| GET    | `/api/similar-jobs`          | Find similar jobs by CV text   |
+| GET    | `/api/job-library`           | List built-in library          |
+| GET    | `/api/job-library-text/{id}` | Get full text of library job   |
+| POST   | `/api/add-job`               | Add job by text                |
+| POST   | `/api/add-job-url`           | Add job by URL                 |
+| GET    | `/api/skills`                | Extract skills from text       |
 
 **Example — text match:**
+
 ```bash
 curl -X POST http://localhost:8000/match/text \
   -H "Content-Type: application/json" \
@@ -179,6 +172,7 @@ curl -X POST http://localhost:8000/match/text \
 ```
 
 **Example — URL match:**
+
 ```bash
 curl -X POST http://localhost:8000/match/url \
   -H "Content-Type: application/json" \
@@ -249,24 +243,24 @@ Real limitations discovered during development, documented honestly.
 
 ## 11. Dependencies
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `sentence-transformers` | >=2.6 | Semantic embeddings (all-MiniLM-L6-v2) |
-| `pinecone` | >=3.0 | Vector database for job library |
-| `spacy` | >=3.7 | NLP dependency (model no longer used for skill extraction) |
-| `trafilatura` | >=1.8 | URL content extraction |
-| `rouge-score` | >=0.1.2 | ROUGE keyword overlap metrics |
-| `pymupdf` | >=1.23 | PDF text extraction |
-| `beautifulsoup4` | >=4.12 | HTML fallback extraction |
-| `requests` | >=2.31 | HTTP client for URL fetching |
-| `fastapi` | >=0.110 | REST API framework |
-| `uvicorn` | >=0.27 | ASGI server (development) |
-| `gunicorn` | >=21.0 | WSGI server (production) |
-| `pydantic` | >=2.0 | Request/response validation |
-| `numpy` | >=1.24,<2.0 | Numerical operations |
-| `pandas` | >=2.0 | Data manipulation |
-| `jupyter` | >=1.0 | Notebook environment |
-| `pytest` | >=7.0 | API tests |
-| `httpx` | >=0.27 | Async HTTP client for TestClient |
-| `python-multipart` | >=0.0.9 | File upload support (FastAPI) |
-| `python-dotenv` | >=1.0 | Load `.env` for local development |
+| Package                 | Version     | Purpose                                                    |
+| ----------------------- | ----------- | ---------------------------------------------------------- |
+| `sentence-transformers` | >=2.6       | Semantic embeddings (all-MiniLM-L6-v2)                     |
+| `pinecone`              | >=3.0       | Vector database for job library                            |
+| `spacy`                 | >=3.7       | NLP dependency (model no longer used for skill extraction) |
+| `trafilatura`           | >=1.8       | URL content extraction                                     |
+| `rouge-score`           | >=0.1.2     | ROUGE keyword overlap metrics                              |
+| `pymupdf`               | >=1.23      | PDF text extraction                                        |
+| `beautifulsoup4`        | >=4.12      | HTML fallback extraction                                   |
+| `requests`              | >=2.31      | HTTP client for URL fetching                               |
+| `fastapi`               | >=0.110     | REST API framework                                         |
+| `uvicorn`               | >=0.27      | ASGI server (development)                                  |
+| `gunicorn`              | >=21.0      | WSGI server (production)                                   |
+| `pydantic`              | >=2.0       | Request/response validation                                |
+| `numpy`                 | >=1.24,<2.0 | Numerical operations                                       |
+| `pandas`                | >=2.0       | Data manipulation                                          |
+| `jupyter`               | >=1.0       | Notebook environment                                       |
+| `pytest`                | >=7.0       | API tests                                                  |
+| `httpx`                 | >=0.27      | Async HTTP client for TestClient                           |
+| `python-multipart`      | >=0.0.9     | File upload support (FastAPI)                              |
+| `python-dotenv`         | >=1.0       | Load `.env` for local development                          |
